@@ -12,7 +12,7 @@ export const App = () => {
 	const clickBack = () => {};
 	const startOver = () => {};
 
-	// И 2 переменных-флага — находимся ли мы на первом шаге, и находимся ли на последнем
+	// И 2 переменных-флага — находимся ли мы на первом  шаге, и находимся ли на последнем
 
 	const [isFirstStep, setIsFirstStep] = useState(true);
 	const [isLastStep, setIsLastStep] = useState(false);
