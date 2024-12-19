@@ -7,15 +7,38 @@ export const App = () => {
 	const [steps, setSteps] = useState(data);
 	const [activeIndex, setActiveIndex] = useState(0);
 
-	// И определить 3 обработчика: Клик назад, Клик вперед, Начать сначала
-	const clickNext = () => {};
-	const clickBack = () => {};
-	const startOver = () => {};
+	const clickNext = () => {
+		if (activeIndex < steps.length - 1) {
+			setActiveIndex(activeIndex + 1);
+		} else if (activeIndex === steps.length - 1) {
+			setActiveIndex(0);
+		}
+	};
+	const clickBack = () => {
+		if (activeIndex > 0) {
+			setActiveIndex(activeIndex - 1);
+		}
+	};
+	const clickSteps = (stepIndex) => {
+		setActiveIndex(stepIndex);
+	};
 
-	// И 2 переменных-флага — находимся ли мы на первом  шаге, и находимся ли на последнем
-
-	const [isFirstStep, setIsFirstStep] = useState(true);
-	const [isLastStep, setIsLastStep] = useState(false);
+	const renderSteps = () => {
+		return steps.map((step, index) => (
+			<li
+				className={`${styles['steps-item']} ${index <= activeIndex ? styles.done : ''} ${index === activeIndex ? styles.active : ''} `}
+				key={step.id}
+			>
+				<button
+					className={styles['steps-item-button']}
+					onClick={() => clickSteps(index)}
+				>
+					{index + 1}
+				</button>
+				<div className="content">{step.title}</div>
+			</li>
+		));
+	};
 
 	return (
 		<div className={styles.container}>
@@ -23,44 +46,24 @@ export const App = () => {
 				<h1>Инструкция по готовке пельменей</h1>
 				<div className={styles.steps}>
 					<div className={styles['steps-content']}>
-						{/* {steps[activeIndex]} */}
-						Контент соответственный шагу. Сейчас активен шаг 3
+						{steps[activeIndex].content}
 					</div>
-					<ul className={styles['steps-list']}>
-						{/* Выводите <li> с помощью массива steps и метода map(), подставляя в разметку нужные значения и классы */}
-						<li className={styles['steps-item'] + ' ' + styles.done}>
-							{/* Для того, чтобы вычислить необходимый класс используйте активный индекс, текущий индекс, а также тернарные операторы */}
-							<button className={styles['steps-item-button']}>1</button>
-							{/* При клике на кнопку установка выбранного шага в качестве активного */}
-							Шаг 1
-						</li>
-						<li className={styles['steps-item'] + ' ' + styles.done}>
-							<button className={styles['steps-item-button']}>2</button>
-							Шаг 2
-						</li>
-						<li
-							className={
-								styles['steps-item'] +
-								' ' +
-								styles.done +
-								' ' +
-								styles.active
-							}
-						>
-							<button className={styles['steps-item-button']}>3</button>
-							Шаг 3
-						</li>
-						<li className={styles['steps-item']}>
-							<button className={styles['steps-item-button']}>4</button>
-							Шаг 4
-						</li>
-					</ul>
+					<ul className={styles['steps-list']}>{renderSteps()}</ul>
 					<div className={styles['buttons-container']}>
-						<button className={styles.button}>Назад</button>
-						<button className={styles.button}>
-							Далее
-							{/* "Начать сначала", можно сделать этой же кнопкой, просто подменять обработчик и текст в зависимости от условия */}
-							{/* Или заменять всю кнопку в зависимости от условия */}
+						<button
+							className={styles.button}
+							disabled={activeIndex === 0}
+							onClick={clickBack}
+						>
+							Назад
+						</button>
+						<button
+							className={styles.button}
+							onClick={clickNext}
+						>
+							{activeIndex === steps.length - 1
+								? 'Начать сначала'
+								: 'Далее'}
 						</button>
 					</div>
 				</div>
